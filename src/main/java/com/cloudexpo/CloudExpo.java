@@ -34,6 +34,7 @@ public class CloudExpo {
 
 //        WebDriverManager.chromedriver().setup();
         driver = new ChromeDriver();
+        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
         driver.get(BASE_URL);
         waitForElement(cookieBtn).click();
         waitForElement(langCode).click();
@@ -67,7 +68,7 @@ public class CloudExpo {
 
     public static WebElement waitForElement(By by) {
         FluentWait<WebDriver> wait = new FluentWait<>(driver);
-        wait.withTimeout(Duration.ofSeconds(10));
+        wait.withTimeout(Duration.ofSeconds(30));
         wait.pollingEvery(Duration.ofMillis(500));
         wait.ignoring(NoSuchElementException.class);
         return wait.until(ExpectedConditions.presenceOfElementLocated(by));
