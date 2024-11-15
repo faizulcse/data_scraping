@@ -41,7 +41,7 @@ public class CloudExpo {
         waitForElement(engLang).click();
 
         List<WebElement> companyList = driver.findElements(companies);
-        for (; companyList.size() != 167; ) {
+        for (; !(companyList.size() >= 167); ) {
             JavascriptExecutor js = (JavascriptExecutor) driver;
             js.executeScript("window.scrollBy(0, 800)", "");
             sleep(2);
