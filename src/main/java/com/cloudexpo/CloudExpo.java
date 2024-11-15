@@ -20,17 +20,17 @@ public class CloudExpo {
     public static WebDriver driver;
 
     public static void main(String[] args) throws IOException {
+        String tasksFile = "cloud_expo.csv";
+        List<String> list = new LinkedList<>();
+        BufferedWriter taskWriter = Files.newBufferedWriter(Paths.get(tasksFile));
+        CSVPrinter taskPrinter = new CSVPrinter(taskWriter, CSVFormat.DEFAULT.builder().setHeader("CompanyURL", "CompanyName", "CompanyDescription").setTrim(true).build());
+
         By cookieBtn = By.xpath("//button[@data-cky-tag='accept-button']");
         By langCode = By.xpath("//span[@class='gt-lang-code']");
         By engLang = By.xpath("//a[@data-gt-lang='en']");
         By companies = By.xpath("//*[contains(@data-url,'https://cloudexpo.nl/exposanten/')]");
         By title = By.xpath("//h1[@class='elementor-heading-title elementor-size-default']");
         By desc = By.xpath("//div[@data-widget_type='theme-post-content.default']");
-
-        String tasksFile = "cloud_expo.csv";
-        List<String> list = new LinkedList<>();
-        BufferedWriter taskWriter = Files.newBufferedWriter(Paths.get(tasksFile));
-        CSVPrinter taskPrinter = new CSVPrinter(taskWriter, CSVFormat.DEFAULT.builder().setHeader("CompanyURL", "CompanyName", "CompanyDescription").setTrim(true).build());
 
 //        WebDriverManager.chromedriver().setup();
         driver = new ChromeDriver();
@@ -41,7 +41,7 @@ public class CloudExpo {
         waitForElement(engLang).click();
 
         List<WebElement> companyList = driver.findElements(companies);
-        for (int i = 0; companyList.size() != 167 || i < 50; i++) {
+        for (; companyList.size() != 167; ) {
             JavascriptExecutor js = (JavascriptExecutor) driver;
             js.executeScript("window.scrollBy(0, 800)", "");
             sleep(2);
@@ -71,7 +71,7 @@ public class CloudExpo {
         wait.withTimeout(Duration.ofSeconds(30));
         wait.pollingEvery(Duration.ofMillis(500));
         wait.ignoring(NoSuchElementException.class);
-        return wait.until(ExpectedConditions.presenceOfElementLocated(by));
+        return wait.until(ExpectedConditions.visibilityOfElementLocated(by));
     }
 
     public static void sleep(int seconds) {
